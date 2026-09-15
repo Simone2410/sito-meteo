@@ -27,8 +27,13 @@ body {
 main#app {
   min-height: 100vh;
   display: flex;
-  justify-content: center;
+  justify-content: center;  
+  align-items: flex-start;  
   padding: 2.5rem 1.2rem;
+}
+
+main#app.centered {
+  align-items: center;     
 }
 
 .app-layout {

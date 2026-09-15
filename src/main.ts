@@ -27,6 +27,8 @@ app.innerHTML = `
   </div>
 `;
 
+app.classList.add('centered'); // 👈 qui, fuori dalle backtick
+
 const form = document.querySelector<HTMLFormElement>('#search-form')!;
 const input = document.querySelector<HTMLInputElement>('#city-input')!;
 const resultContainer = document.querySelector<HTMLDivElement>('#result-container')!;
@@ -44,6 +46,7 @@ form.addEventListener('submit', async (event) => {
 
     if (results.length === 0) {
       resultContainer.innerHTML = `<p class="result-message error">Nessuna città trovata per "${cityName}".</p>`;
+      app.classList.add('centered');
       return;
     }
 
@@ -51,8 +54,10 @@ form.addEventListener('submit', async (event) => {
     const weather = await getForecast(location.latitude, location.longitude);
 
     resultContainer.innerHTML = renderWeatherResult(location, weather);
+    app.classList.remove('centered');
   } catch (error) {
     console.error(error);
     resultContainer.innerHTML = '<p class="result-message error">⚠️ Errore nel caricamento del meteo. Riprova.</p>';
+    app.classList.add('centered');
   }
 });

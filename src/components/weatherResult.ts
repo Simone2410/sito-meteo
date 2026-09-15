@@ -2,18 +2,17 @@ import type { GeocodingResult } from '../types/geocoding';
 import type { WeatherData } from '../types/weather';
 import { getWeatherInfo } from '../utils/weatherCodes';
 
-function formatDayLabel(dateStr: string, index: number): string {
+function formatDayLabel(date: Date, index: number): string {
   if (index === 0) return 'Oggi';
-  const date = new Date(dateStr);
   const label = date.toLocaleDateString('it-IT', { weekday: 'short' });
   return label.charAt(0).toUpperCase() + label.slice(1).replace('.', '');
 }
 
-function renderForecastDay(dateStr: string, code: number, max: number, min: number, index: number): string {
+function renderForecastDay(date: Date, code: number, max: number, min: number, index: number): string {
   const { emoji } = getWeatherInfo(code);
   return `
     <div class="forecast-day">
-      <span class="forecast-day-label">${formatDayLabel(dateStr, index)}</span>
+      <span class="forecast-day-label">${formatDayLabel(date, index)}</span>
       <span class="forecast-day-icon">${emoji}</span>
       <span class="forecast-day-temps">${Math.round(max)}° / ${Math.round(min)}°</span>
     </div>
@@ -22,16 +21,14 @@ function renderForecastDay(dateStr: string, code: number, max: number, min: numb
 
 export function renderWeatherResult(location: GeocodingResult, weather: WeatherData): string {
   const { current, daily } = weather;
-  const { emoji, label } = getWeatherInfo(current.weather_code);
+  const { emoji, label } = getWeatherInfo(current.weatherCode);
 
   const locationLabel = location.admin1
     ? `${location.name}, ${location.admin1}`
     : `${location.name}, ${location.country}`;
 
   const forecastDays = daily.time
-    .map((dateStr, i) =>
-      renderForecastDay(dateStr, daily.weather_code[i], daily.temperature_2m_max[i], daily.temperature_2m_min[i], i)
-    )
+    .map((date, i) => renderForecastDay(date, daily.weatherCode[i], daily.temperatureMax[i], daily.temperatureMin[i], i))
     .join('');
 
   return `
@@ -40,21 +37,21 @@ export function renderWeatherResult(location: GeocodingResult, weather: WeatherD
 
       <div class="result-current">
         <span class="result-icon">${emoji}</span>
-        <span class="result-temp">${Math.round(current.temperature_2m)}°</span>
+        <span class="result-temp">${Math.round(current.temperature)}°</span>
       </div>
       <p class="result-condition">${label}</p>
 
       <div class="result-stats">
         <div class="stat">
-          <span class="stat-value">${Math.round(current.apparent_temperature)}°</span>
+          <span class="stat-value">${Math.round(current.apparentTemperature)}°</span>
           <span class="stat-label">Percepita</span>
         </div>
         <div class="stat">
-          <span class="stat-value">${current.relative_humidity_2m}%</span>
+          <span class="stat-value">${current.relativeHumidity}%</span>
           <span class="stat-label">Umidità</span>
         </div>
         <div class="stat">
-          <span class="stat-value">${Math.round(current.wind_speed_10m)} km/h</span>
+          <span class="stat-value">${Math.round(current.windSpeed)} km/h</span>
           <span class="stat-label">Vento</span>
         </div>
       </div>

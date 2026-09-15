@@ -6,23 +6,25 @@ import { renderWeatherResult } from './components/weatherResult';
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
 app.innerHTML = `
-  <div class="weather-card">
-    <h1 class="weather-title">Meteo App</h1>
-    <p class="weather-subtitle">Cerca una città e scopri le previsioni</p>
+  <div class="app-layout">
+    <div class="weather-card">
+      <h1 class="weather-title">Horizon</h1>
+      <p class="weather-subtitle">Cerca una città e scopri le previsioni</p>
 
-    <form id="search-form" class="search-form">
-      <input
-        type="text"
-        id="city-input"
-        class="search-input"
-        placeholder="Es. Busto Arsizio"
-        autocomplete="off"
-        required
-      />
-      <button type="submit" class="search-button">Cerca</button>
-    </form>
+      <form id="search-form" class="search-form">
+        <input
+          type="text"
+          id="city-input"
+          class="search-input"
+          placeholder="Es. Busto Arsizio"
+          autocomplete="off"
+          required
+        />
+        <button type="submit" class="search-button">Cerca</button>
+      </form>
+    </div>
+    <div id="result-container"></div>
   </div>
-  <div id="result-container"></div>
 `;
 
 const form = document.querySelector<HTMLFormElement>('#search-form')!;
